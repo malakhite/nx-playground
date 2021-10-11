@@ -33,8 +33,6 @@ export class ArticlesService {
 				content,
 				slug,
 				title,
-				tsv: () =>
-					"(setweight(to_tsvector('english', coalesce(title, ''), 'A') || (setweight(to_tsvector('english', coalesce(content, ''), 'B'))",
 			})
 			.execute();
 
