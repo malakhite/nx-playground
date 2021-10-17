@@ -5,8 +5,10 @@ import {
 	Get,
 	Param,
 	Post,
+	UseGuards,
 	UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -31,6 +33,7 @@ export class UsersController {
 		return await this.usersService.findOneByEmail(email);
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto) {
 		return await this.usersService.createUser(createUserDto);

@@ -24,12 +24,12 @@ export class User {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Column({ unique: true })
+	@Column({ type: 'varchar', unique: true })
 	@IsEmail()
 	email: string;
 
 	@Exclude()
-	@Column()
+	@Column('varchar')
 	password: string;
 
 	@BeforeInsert()
@@ -37,10 +37,13 @@ export class User {
 		this.password = await argon2.hash(this.password);
 	}
 
-	@Column()
+	@Column('varchar')
 	name: string;
 
-	@Column()
+	@Column({
+		nullable: true,
+		type: 'text',
+	})
 	bio: string;
 
 	@Exclude()
@@ -54,28 +57,24 @@ export class User {
 	@OneToMany(() => Link, (link) => link.user_id)
 	links: Link[];
 
-	@Exclude()
+	@ManyToMany(() => Article, (article) => article.authors)
+	articles: Article[];
+
 	@CreateDateColumn({
 		type: 'timestamptz',
 	})
 	created_at: Date;
 
-	@Exclude()
 	@UpdateDateColumn({
 		type: 'timestamptz',
 	})
 	updated_at: Date;
 
-	@Exclude()
 	@DeleteDateColumn({
 		type: 'timestamptz',
 	})
 	deleted_at: Date;
 
-	@Exclude()
 	@VersionColumn()
 	version: number;
-
-	// @ManyToMany(() => Article, (article) => article.authors)
-	// articles: Article[];
 }

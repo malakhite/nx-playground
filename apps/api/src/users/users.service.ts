@@ -16,6 +16,7 @@ export class UsersService {
 		@InjectRepository(Link)
 		private linksRepository: Repository<Link>,
 	) {}
+
 	async findAll(): Promise<User[]> {
 		return await this.usersRepository.find({ relations: ['links'] });
 	}

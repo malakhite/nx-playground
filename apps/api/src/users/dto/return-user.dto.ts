@@ -1,10 +1,9 @@
-import { Exclude } from 'class-transformer';
-import type { Social } from '../interfaces/social.interface';
+import { Link } from '../entities/links.entity';
 
 export class ReturnUserDto {
 	id: string;
 	email: string;
 	name: string;
 	bio: string;
-	links?: Social[];
+	links?: Link[];
 }

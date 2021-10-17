@@ -35,7 +35,7 @@ export class Link {
 	})
 	user_id: string;
 
-	@Column()
+	@Column('varchar')
 	data: string;
 
 	@Column({

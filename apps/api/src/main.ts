@@ -13,9 +13,10 @@ async function bootstrap() {
 	const globalPrefix = 'api';
 	app.setGlobalPrefix(globalPrefix);
 	app.useGlobalPipes(new ValidationPipe());
+	const host = process.env.HOST || 'localhost';
 	const port = process.env.PORT || 3333;
-	await app.listen(port, () => {
-		Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+	await app.listen(port, host, () => {
+		Logger.log('Listening at ' + host + ':' + port + '/' + globalPrefix);
 	});
 }
 

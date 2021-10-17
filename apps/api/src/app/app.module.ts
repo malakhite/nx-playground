@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArticlesModule } from '../articles/articles.module';
+import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
+import { AppController } from './app.controller';
 
 @Module({
 	imports: [
@@ -16,11 +18,13 @@ import { UsersModule } from '../users/users.module';
 			database: process.env.POSTGRES_DB,
 			synchronize: process.env.NODE_ENV === 'development',
 			autoLoadEntities: process.env.NODE_ENV === 'development',
+			logging: 'all',
 		}),
 		ArticlesModule,
 		UsersModule,
+		AuthModule,
 	],
-	controllers: [],
+	controllers: [AppController],
 	providers: [],
 })
 export class AppModule {}

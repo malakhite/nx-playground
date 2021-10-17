@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 import { CreateArticleDto } from './dto/createArticle.dto';
 import { Article } from './entities/article.entity';
 
@@ -9,6 +10,9 @@ export class ArticlesService {
 	constructor(
 		@InjectRepository(Article)
 		private articlesRepository: Repository<Article>,
+
+		@InjectRepository(User)
+		private usersRepository: Repository<User>,
 	) {}
 
 	async findAll(): Promise<Article[]> {
@@ -24,22 +28,17 @@ export class ArticlesService {
 	}
 
 	async createArticle(createArticleDto: CreateArticleDto): Promise<Article> {
-		const { authors, content, slug, title } = createArticleDto;
-		const qb = this.articlesRepository.createQueryBuilder();
-		await qb
-			.insert()
-			.into(Article)
-			.values({
-				content,
-				slug,
-				title,
-			})
-			.execute();
+		const { authors: authorIds, content, slug, title } = createArticleDto;
 
-		const article = await this.findOneBySlug(slug);
+		const authors = await this.usersRepository.findByIds(authorIds);
+		const article = new Article();
+		article.authors = authors;
+		article.content = content;
+		article.slug = slug;
+		article.title = title;
 
-		await qb.relation(Article, 'authors').of(article).add(authors);
+		const savedArticle = await this.articlesRepository.save(article);
 
-		return article;
+		return savedArticle;
 	}
 }

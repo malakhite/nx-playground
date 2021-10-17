@@ -18,14 +18,14 @@ export class Article {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Column({ unique: true })
-	@Index({ unique: true })
+	@Column({ type: 'varchar', unique: true })
+	@Index('slug_idx', { unique: true })
 	slug: string;
 
-	@Column()
+	@Column('varchar')
 	title: string;
 
-	@ManyToMany(() => User)
+	@ManyToMany(() => User, (user) => user.articles)
 	@JoinTable({
 		joinColumn: {
 			name: 'article_id',
@@ -66,6 +66,6 @@ export class Article {
 	version: number;
 
 	@Column({ type: 'tsvector' })
-	@Index()
+	@Index('tsv_idx', { synchronize: false })
 	tsv: string;
 }
