@@ -1,9 +1,8 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class createTsVector1633974710667 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        queryRunner.query(`
+export class createTsVector1634853745778 implements MigrationInterface {
+	public async up(queryRunner: QueryRunner): Promise<void> {
+		queryRunner.query(`
             CREATE FUNCTION articles_trigger() RETURNS trigger AS $$
             begin
             new.tsv :=
@@ -15,14 +14,13 @@ export class createTsVector1633974710667 implements MigrationInterface {
             
             CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
                 ON articles FOR EACH ROW EXECUTE FUNCTION articles_trigger();
-        `)
-    }
+        `);
+	}
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        queryRunner.query(`
+	public async down(queryRunner: QueryRunner): Promise<void> {
+		queryRunner.query(`
             DROP TRIGGER tsvectorupdate ON articles;
             DROP FUNCTION articles_trigger;
-        `)
-    }
-
+        `);
+	}
 }
